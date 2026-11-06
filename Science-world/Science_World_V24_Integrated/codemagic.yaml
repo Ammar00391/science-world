@@ -1,0 +1,67 @@
+workflows:
+  science-world-android-release:
+    name: Science World Android Release
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+
+    environment:
+      flutter: stable
+      xcode: latest
+      java: 17
+      groups:
+        - supabase_credentials
+      android_signing:
+        - science_world_upload_keystore
+
+    scripts:
+      - name: Configure Android and Flutter SDK paths
+        script: |
+          set -euo pipefail
+          : "${ANDROID_SDK_ROOT:?ANDROID_SDK_ROOT is not set by Codemagic}"
+          : "${FLUTTER_ROOT:?FLUTTER_ROOT is not set by Codemagic}"
+          mkdir -p "$CM_BUILD_DIR/android"
+          {
+            printf 'sdk.dir=%s\n' "$ANDROID_SDK_ROOT"
+            printf 'flutter.sdk=%s\n' "$FLUTTER_ROOT"
+          } > "$CM_BUILD_DIR/android/local.properties"
+
+      - name: Verify Android Gradle runner
+        script: |
+          set -euo pipefail
+          chmod +x "$CM_BUILD_DIR/android/gradlew"
+          "$CM_BUILD_DIR/android/gradlew" --version
+
+      - name: Validate Supabase build variables
+        script: |
+          set -euo pipefail
+          : "${SUPABASE_URL:?Add SUPABASE_URL to the supabase_credentials group in Codemagic}"
+          : "${SUPABASE_PUBLISHABLE_KEY:?Add SUPABASE_PUBLISHABLE_KEY to the supabase_credentials group in Codemagic}"
+          case "$SUPABASE_URL" in
+            https://*) ;;
+            *) echo "SUPABASE_URL must start with https://"; exit 1 ;;
+          esac
+          case "$SUPABASE_PUBLISHABLE_KEY" in
+            sb_publishable_*) ;;
+            *) echo "Use the Supabase publishable key (sb_publishable_...), not a service_role/secret key."; exit 1 ;;
+          esac
+
+      - name: Get Flutter packages
+        script: |
+          set -euo pipefail
+          flutter --version
+          flutter pub get
+
+      - name: Build Android App Bundle and APK
+        script: |
+          set -euo pipefail
+          flutter build appbundle --release \
+            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+            --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
+          flutter build apk --release \
+            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+            --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
+
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+      - build/app/outputs/flutter-apk/*.apk
+

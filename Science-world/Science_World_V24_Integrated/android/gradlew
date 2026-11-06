@@ -1,0 +1,32 @@
+#!/bin/sh
+# Codemagic-compatible Gradle launcher for this project.
+# The build image ships Gradle 8.14.1; use it without requiring a missing
+# gradle-wrapper.jar. If a standard Gradle installation is available locally,
+# GRADLE_HOME or PATH can be used as a fallback.
+set -eu
+
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+PROJECT_GRADLE_VERSION="8.14.1"
+
+if [ -n "${GRADLE_HOME:-}" ] && [ -x "$GRADLE_HOME/bin/gradle" ]; then
+  exec "$GRADLE_HOME/bin/gradle" -p "$SCRIPT_DIR" "$@"
+fi
+
+for candidate in \
+  "${HOME:-}/programs/gradle-${PROJECT_GRADLE_VERSION}/bin/gradle" \
+  "/Users/builder/programs/gradle-${PROJECT_GRADLE_VERSION}/bin/gradle"; do
+  if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+    exec "$candidate" -p "$SCRIPT_DIR" "$@"
+  fi
+done
+
+if command -v gradle >/dev/null 2>&1; then
+  exec gradle -p "$SCRIPT_DIR" "$@"
+fi
+
+cat >&2 <<'EOF'
+Gradle was not found.
+Codemagic macOS builders provide Gradle 8.14.1 at ~/programs/gradle-8.14.1.
+For a local machine, install Gradle 8.14.1 or set GRADLE_HOME to its installation.
+EOF
+exit 1

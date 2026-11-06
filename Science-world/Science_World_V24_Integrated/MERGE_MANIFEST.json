@@ -1,0 +1,262 @@
+{
+  "source_archives": [
+    "Science_World_Complete_Project_v1.zip",
+    "Science_World_Updated_v2.zip",
+    "Science_World_Audit_v3.zip",
+    "Science_World_StudyBank_v4.zip",
+    "Science_World_Profile_OTP_v5.zip",
+    "Science_World_Intro_v6.zip"
+  ],
+  "active_files": 139,
+  "conflicting_versions_preserved": 33,
+  "conflicts": [
+    {
+      "path": "lib/app/router/app_router.dart",
+      "preserved_version": "v1",
+      "active_version": "v6",
+      "old_bytes": 4977,
+      "active_bytes": 5106
+    },
+    {
+      "path": "lib/app/router/app_router.dart",
+      "preserved_version": "v2",
+      "active_version": "v6",
+      "old_bytes": 4977,
+      "active_bytes": 5106
+    },
+    {
+      "path": "lib/app/router/app_router.dart",
+      "preserved_version": "v3",
+      "active_version": "v6",
+      "old_bytes": 4977,
+      "active_bytes": 5106
+    },
+    {
+      "path": "lib/app/router/app_router.dart",
+      "preserved_version": "v4",
+      "active_version": "v6",
+      "old_bytes": 4977,
+      "active_bytes": 5106
+    },
+    {
+      "path": "lib/app/router/app_router.dart",
+      "preserved_version": "v5",
+      "active_version": "v6",
+      "old_bytes": 4977,
+      "active_bytes": 5106
+    },
+    {
+      "path": "lib/features/auth/data/auth_service.dart",
+      "preserved_version": "v1",
+      "active_version": "v6",
+      "old_bytes": 1632,
+      "active_bytes": 2503
+    },
+    {
+      "path": "lib/features/auth/data/auth_service.dart",
+      "preserved_version": "v2",
+      "active_version": "v6",
+      "old_bytes": 1632,
+      "active_bytes": 2503
+    },
+    {
+      "path": "lib/features/auth/data/auth_service.dart",
+      "preserved_version": "v3",
+      "active_version": "v6",
+      "old_bytes": 1632,
+      "active_bytes": 2503
+    },
+    {
+      "path": "lib/features/auth/data/auth_service.dart",
+      "preserved_version": "v4",
+      "active_version": "v6",
+      "old_bytes": 1632,
+      "active_bytes": 2503
+    },
+    {
+      "path": "lib/features/auth/presentation/signup_page.dart",
+      "preserved_version": "v1",
+      "active_version": "v6",
+      "old_bytes": 1945,
+      "active_bytes": 2577
+    },
+    {
+      "path": "lib/features/auth/presentation/signup_page.dart",
+      "preserved_version": "v2",
+      "active_version": "v6",
+      "old_bytes": 2094,
+      "active_bytes": 2577
+    },
+    {
+      "path": "lib/features/auth/presentation/verify_page.dart",
+      "preserved_version": "v1",
+      "active_version": "v6",
+      "old_bytes": 3305,
+      "active_bytes": 4591
+    },
+    {
+      "path": "lib/features/auth/presentation/verify_page.dart",
+      "preserved_version": "v2",
+      "active_version": "v6",
+      "old_bytes": 3899,
+      "active_bytes": 4591
+    },
+    {
+      "path": "lib/features/auth/presentation/verify_page.dart",
+      "preserved_version": "v3",
+      "active_version": "v6",
+      "old_bytes": 4362,
+      "active_bytes": 4591
+    },
+    {
+      "path": "lib/features/auth/presentation/verify_page.dart",
+      "preserved_version": "v4",
+      "active_version": "v6",
+      "old_bytes": 4362,
+      "active_bytes": 4591
+    },
+    {
+      "path": "lib/features/profile/presentation/profile_page.dart",
+      "preserved_version": "v1",
+      "active_version": "v6",
+      "old_bytes": 800,
+      "active_bytes": 8799
+    },
+    {
+      "path": "lib/features/profile/presentation/profile_page.dart",
+      "preserved_version": "v2",
+      "active_version": "v6",
+      "old_bytes": 800,
+      "active_bytes": 8799
+    },
+    {
+      "path": "lib/features/profile/presentation/profile_page.dart",
+      "preserved_version": "v3",
+      "active_version": "v6",
+      "old_bytes": 800,
+      "active_bytes": 8799
+    },
+    {
+      "path": "lib/features/profile/presentation/profile_page.dart",
+      "preserved_version": "v4",
+      "active_version": "v6",
+      "old_bytes": 800,
+      "active_bytes": 8799
+    },
+    {
+      "path": "lib/features/questions/data/question_repository.dart",
+      "preserved_version": "v1",
+      "active_version": "v6",
+      "old_bytes": 2200,
+      "active_bytes": 4524
+    },
+    {
+      "path": "lib/features/questions/data/question_repository.dart",
+      "preserved_version": "v2",
+      "active_version": "v6",
+      "old_bytes": 2200,
+      "active_bytes": 4524
+    },
+    {
+      "path": "lib/features/questions/data/question_repository.dart",
+      "preserved_version": "v3",
+      "active_version": "v6",
+      "old_bytes": 2200,
+      "active_bytes": 4524
+    },
+    {
+      "path": "lib/features/quiz/presentation/quiz_bank_page.dart",
+      "preserved_version": "v1",
+      "active_version": "v6",
+      "old_bytes": 401,
+      "active_bytes": 4958
+    },
+    {
+      "path": "lib/features/quiz/presentation/quiz_bank_page.dart",
+      "preserved_version": "v2",
+      "active_version": "v6",
+      "old_bytes": 401,
+      "active_bytes": 4958
+    },
+    {
+      "path": "lib/features/quiz/presentation/quiz_bank_page.dart",
+      "preserved_version": "v3",
+      "active_version": "v6",
+      "old_bytes": 401,
+      "active_bytes": 4958
+    },
+    {
+      "path": "lib/features/splash/presentation/splash_page.dart",
+      "preserved_version": "v1",
+      "active_version": "v6",
+      "old_bytes": 1339,
+      "active_bytes": 1340
+    },
+    {
+      "path": "lib/features/splash/presentation/splash_page.dart",
+      "preserved_version": "v2",
+      "active_version": "v6",
+      "old_bytes": 1339,
+      "active_bytes": 1340
+    },
+    {
+      "path": "lib/features/splash/presentation/splash_page.dart",
+      "preserved_version": "v3",
+      "active_version": "v6",
+      "old_bytes": 1339,
+      "active_bytes": 1340
+    },
+    {
+      "path": "lib/features/splash/presentation/splash_page.dart",
+      "preserved_version": "v4",
+      "active_version": "v6",
+      "old_bytes": 1339,
+      "active_bytes": 1340
+    },
+    {
+      "path": "lib/features/splash/presentation/splash_page.dart",
+      "preserved_version": "v5",
+      "active_version": "v6",
+      "old_bytes": 1339,
+      "active_bytes": 1340
+    },
+    {
+      "path": "pubspec.yaml",
+      "preserved_version": "v1",
+      "active_version": "v6",
+      "old_bytes": 778,
+      "active_bytes": 818
+    },
+    {
+      "path": "pubspec.yaml",
+      "preserved_version": "v2",
+      "active_version": "v6",
+      "old_bytes": 778,
+      "active_bytes": 818
+    },
+    {
+      "path": "pubspec.yaml",
+      "preserved_version": "v3",
+      "active_version": "v6",
+      "old_bytes": 778,
+      "active_bytes": 818
+    }
+  ],
+  "legacy_filename_mappings": [
+    {
+      "original_path": "Γò¬┬¼Γöÿ├⌐Γò¬ΓûÆΓöÿ├¿Γò¬ΓûÆ-Γò¬┬║Γöÿ├ñΓò¬┬¼Γò¬┬╗Γöÿ├⌐Γöÿ├¿Γöÿ├⌐-Γöÿ├¬Γò¬┬║Γöÿ├ñΓò¬┬¼Γò¬┬íΓò¬ΓöéΓöÿ├¿Γöÿ├ÑΓò¬┬║Γò¬┬¼-v3.md",
+      "safe_path": "legacy_c4bdada9e999e91b.md",
+      "archive": "v6"
+    },
+    {
+      "original_path": "Γò¬┬¼Γöÿ├⌐Γò¬ΓûÆΓöÿ├¿Γò¬ΓûÆ-Γò¬┬║Γöÿ├ñΓò¬┬¼Γò¬ΓòúΓò¬┬╗Γöÿ├¿Γöÿ├ñΓò¬┬║Γò¬┬¼-Γò¬┬║Γöÿ├ñΓò¬ΓòúΓò¬ΓûÆΓò¬┬┐Γöÿ├¿Γò¬ΓîÉ.md",
+      "safe_path": "legacy_19805905652af354.md",
+      "archive": "v6"
+    },
+    {
+      "original_path": "Γò¬┬╗Γöÿ├ñΓöÿ├¿Γöÿ├ñ-Γò¬┬┐Γöÿ├ÑΓöÿ├ó-Γò¬┬║Γöÿ├ñΓò¬├║Γò¬ΓöéΓò¬┬¬Γöÿ├ñΓò¬ΓîÉ-Γöÿ├¬Γöÿ├áΓò¬ΓûÆΓò¬┬║Γò¬┬╝Γò¬Γòú-Γò¬┬║Γöÿ├ñΓöÿ├áΓöÿ├ÑΓöÿ├ºΓò¬┬║Γò¬┬╝.md",
+      "safe_path": "legacy_f67b5e50b1550a85.md",
+      "archive": "v6"
+    }
+  ]
+}

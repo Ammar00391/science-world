@@ -1,0 +1,3 @@
+-- DEPRECATED: Do not run this legacy script.
+-- The question bank, versions, tags, and subscription-aware RLS are in supabase/schema.sql.
+-- Run supabase/schema.sql once from Supabase SQL Editor.

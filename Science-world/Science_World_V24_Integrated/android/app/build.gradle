@@ -1,0 +1,101 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader -> localProperties.load(reader) }
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '1'
+def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0'
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader -> keystoreProperties.load(reader) }
+}
+
+// Codemagic injects these variables when an Android keystore reference is
+// configured under environment.android_signing in codemagic.yaml.
+def isCiBuild = System.getenv('CI') == 'true'
+def cmKeystorePath = System.getenv('CM_KEYSTORE_PATH')
+def cmKeystorePassword = System.getenv('CM_KEYSTORE_PASSWORD')
+def cmKeyAlias = System.getenv('CM_KEY_ALIAS')
+def cmKeyPassword = System.getenv('CM_KEY_PASSWORD')
+def hasCodemagicKeystore = [cmKeystorePath, cmKeystorePassword, cmKeyAlias, cmKeyPassword]
+    .every { it != null && !it.trim().isEmpty() }
+
+def hasLocalKeystore = keystorePropertiesFile.exists() &&
+    keystoreProperties.getProperty('storeFile') &&
+    keystoreProperties.getProperty('storePassword') &&
+    keystoreProperties.getProperty('keyAlias') &&
+    keystoreProperties.getProperty('keyPassword')
+
+if (isCiBuild && !hasCodemagicKeystore) {
+    throw new GradleException(
+        'Android release signing is missing. Upload a keystore in Codemagic with reference ' +
+        "'science_world_upload_keystore' and configure its passwords/alias."
+    )
+}
+
+android {
+    namespace "com.scienceworld.science_world"
+    compileSdk 36
+    ndkVersion "28.2.13676358"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    defaultConfig {
+        applicationId "com.scienceworld.science_world"
+        minSdk 21
+        targetSdk 34
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    signingConfigs {
+        release {
+            if (isCiBuild) {
+                keyAlias cmKeyAlias
+                keyPassword cmKeyPassword
+                storeFile file(cmKeystorePath)
+                storePassword cmKeystorePassword
+            } else if (hasLocalKeystore) {
+                keyAlias keystoreProperties.getProperty('keyAlias')
+                keyPassword keystoreProperties.getProperty('keyPassword')
+                storeFile file(keystoreProperties.getProperty('storeFile'))
+                storePassword keystoreProperties.getProperty('storePassword')
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            // CI release builds must use the uploaded release key. For local
+            // development, preserve the previous debug-signed fallback when
+            // no local key.properties file is configured.
+            signingConfig (isCiBuild || hasLocalKeystore) ? signingConfigs.release : signingConfigs.debug
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {}

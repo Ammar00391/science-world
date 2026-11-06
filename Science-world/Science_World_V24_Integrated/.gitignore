@@ -1,0 +1,26 @@
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+*.apk
+*.aab
+
+# Android
+android/.gradle/
+android/local.properties
+android/app/google-services.json
+
+# Secrets
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.iml
+# Android release signing material (never commit)
+android/key.properties
+*.jks
+*.keystore
