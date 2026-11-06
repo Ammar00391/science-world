@@ -87,7 +87,9 @@ android {
             // CI release builds must use the uploaded release key. For local
             // development, preserve the previous debug-signed fallback when
             // no local key.properties file is configured.
-            signingConfig (isCiBuild || hasLocalKeystore) ? signingConfigs.release : signingConfigs.debug
+            
+signingConfig = (isCiBuild || hasLocalKeystore) ? signingConfigs.release : signingConfigs.debug
+
             minifyEnabled false
             shrinkResources false
         }
