@@ -1,0 +1,18 @@
+{
+  "title": "بنك الأسئلة المحلي – عالم العلوم",
+  "language": "ar",
+  "version": 3,
+  "curriculum_reference_year": "2026-2027",
+  "status": "no_approved_questions_yet",
+  "notice": "لا يحتوي هذا الملف على أسئلة غير معتمدة. لا تُضمّن مفاتيح إجابة المسودات في APK. تضاف الأسئلة المجانية بعد مراجعة مدرس المادة وتثبيت مصدرها وطبعتها وصفحاتها.",
+  "official_curriculum_url": "https://curricula.moed.gov.sy/",
+  "question_count": 0,
+  "questions": [],
+  "policy": {
+    "target_per_lesson": 32,
+    "free_per_lesson": 6,
+    "premium_per_lesson": 26,
+    "adaptive_increase_allowed": true,
+    "do_not_pad_or_repeat": true
+  }
+}

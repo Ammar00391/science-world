@@ -1,0 +1,5 @@
+package com.scienceworld.science_world
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()
