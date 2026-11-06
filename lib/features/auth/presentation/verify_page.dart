@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'auth_support_button.dart';
 
 class VerifyPage extends StatefulWidget {
   const VerifyPage({super.key});
+
   @override
   State<VerifyPage> createState() => _VerifyPageState();
 }
@@ -15,6 +17,7 @@ class _VerifyPageState extends State<VerifyPage> {
   final _email = TextEditingController();
   final _code = TextEditingController();
   final _auth = AuthService();
+
   bool _loading = false;
   String? _error;
   bool _canResend = true;
@@ -24,7 +27,10 @@ class _VerifyPageState extends State<VerifyPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final email = GoRouterState.of(context).uri.queryParameters['email'];
+
+    final email =
+        GoRouterState.of(context).uri.queryParameters['email'];
+
     if (email != null && email.isNotEmpty && _email.text.isEmpty) {
       _email.text = email;
     }
@@ -38,30 +44,60 @@ class _VerifyPageState extends State<VerifyPage> {
     super.dispose();
   }
 
-  bool _isValidEmail(String value) => RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value.trim());
+  bool _isValidEmail(String value) =>
+      RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
+          .hasMatch(value.trim());
 
   Future<void> _verify() async {
-    if (!_isValidEmail(_email.text) || !RegExp(r'^\d{6}$').hasMatch(_code.text.trim())) {
-      setState(() => _error = 'أدخل بريدًا صحيحًا ورمز تحقق مكوّنًا من 6 أرقام.');
+    if (!_isValidEmail(_email.text) ||
+        !RegExp(r'^\d{6}$').hasMatch(_code.text.trim())) {
+      setState(() {
+        _error = 'أدخل بريدًا صحيحًا ورمز تحقق مكوّنًا من 6 أرقام.';
+      });
       return;
     }
-    setState(() { _loading = true; _error = null; });
+
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+
     try {
-      await _auth.verifyOtp(_email.text.trim(), _code.text.trim());
+      await _auth.verifyOtp(
+        _email.text.trim(),
+        _code.text.trim(),
+      );
+
       if (mounted) context.go('/welcome');
     } catch (e) {
-      if (mounted) setState(() => _error = 'رمز غير صحيح أو منتهي، أو تعذر الاتصال بالخادم.');
+      if (mounted) {
+        setState(() {
+          _error = 'رمز غير صحيح أو منتهي، أو تعذر الاتصال بالخادم.';
+        });
+      }
     } finally {
-      if (mounted) setState(() => _loading = false);
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 
   Future<void> _resend() async {
     if (_email.text.trim().isEmpty) {
-      setState(() => _error = 'أدخل البريد الإلكتروني أولاً.');
+      setState(() {
+        _error = 'أدخل البريد الإلكتروني أولاً.';
+      });
       return;
     }
-    setState(() { _error = null; _canResend = false; _resendTimer = 60; _startTimer(); });
+
+    setState(() {
+      _error = null;
+      _canResend = false;
+      _resendTimer = 60;
+    });
+
+    _startTimer();
+
     try {
       await _auth.resendOtp(_email.text.trim());
     } catch (e) {
@@ -80,9 +116,17 @@ class _VerifyPageState extends State<VerifyPage> {
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (_resendTimer <= 1) {
         t.cancel();
-        if (mounted) setState(() { _canResend = true; _resendTimer = 0; });
+
+        if (mounted) {
+          setState(() {
+            _canResend = true;
+            _resendTimer = 0;
+          });
+        }
       } else {
-        if (mounted) setState(() => _resendTimer--);
+        if (mounted) {
+          setState(() => _resendTimer--);
+        }
       }
     });
   }
@@ -90,11 +134,15 @@ class _VerifyPageState extends State<VerifyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('تأكيد البريد')),
-      body: SafeArea(child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
+      appBar: AppBar(
+        title: const Text('تأكيد البريد'),
+      ),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
             const AuthSupportButton(),
+
             TextField(
               keyboardType: TextInputType.emailAddress,
               autocorrect: false,
@@ -104,10 +152,15 @@ class _VerifyPageState extends State<VerifyPage> {
                 border: OutlineInputBorder(),
               ),
             ),
+
             const SizedBox(height: 12),
+
             TextField(
               keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(6)],
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(6),
+              ],
               maxLength: 6,
               controller: _code,
               decoration: const InputDecoration(
@@ -115,9 +168,18 @@ class _VerifyPageState extends State<VerifyPage> {
                 border: OutlineInputBorder(),
               ),
             ),
+
             if (_error != null)
-              ...[const SizedBox(height: 8), Text(_error!, style: const TextStyle(color: Colors.red))],
+              ...[
+                const SizedBox(height: 8),
+                Text(
+                  _error!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ],
+
             const SizedBox(height: 16),
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -127,16 +189,20 @@ class _VerifyPageState extends State<VerifyPage> {
                     : const Text('تأكيد'),
               ),
             ),
+
             const SizedBox(height: 8),
+
             TextButton(
-              onPressed: (_canResend && !_loading) ? _resend : null,
+              onPressed: (_canResend && !_loading)
+                  ? _resend
+                  : null,
               child: _resendTimer > 0
                   ? Text('إعادة الإرسال ($_resendTimer ثانية)')
                   : const Text('إعادة الإرسال'),
             ),
           ],
-        ],
-      )),
+        ),
+      ),
     );
   }
 }
