@@ -1,0 +1,67 @@
+workflows:
+  android-release:
+    name: Science World A1 Android
+    instance_type: mac_mini_m2
+    max_build_duration: 90
+
+    environment:
+      flutter: 3.47.9
+      java: 17
+      vars:
+        SUPABASE_URL: "https://faiituujosrsthdrsefw.supabase.co"
+        SUPABASE_PUBLISHABLE_KEY: "sb_publishable_oxs3N5EAiq7zfMH7_gPbgg_F3i6oerr"
+        # Preview only until a persistent owner-controlled upload key is configured.
+        ALLOW_DEBUG_SIGNED_RELEASE: "true"
+
+    scripts:
+      - name: Restore the missing Android Gradle wrapper
+        script: |
+          set -euo pipefail
+          bash scripts/prepare_android_wrapper.sh
+          bash scripts/ensure_android_sdk.sh
+          FLUTTER_BIN="$(command -v flutter)"
+          FLUTTER_ROOT="$(cd "$(dirname "$FLUTTER_BIN")/.." && pwd)"
+          printf 'flutter.sdk=%s\n' "$FLUTTER_ROOT" > android/local.properties
+
+      - name: Validate source and data
+        script: |
+          set -euo pipefail
+          python3 scripts/validate_project.py
+          node --check supabase/functions/ai-chat/index.js
+
+      - name: Install dependencies and analyze
+        script: |
+          set -euo pipefail
+          flutter --version
+          flutter clean
+          flutter pub get
+          flutter analyze
+          flutter test --reporter expanded
+
+      - name: Prepare APK signing
+        script: |
+          set -euo pipefail
+          bash scripts/prepare_release_signing.sh
+
+      - name: Build preview APK
+        script: |
+          set -euo pipefail
+          flutter build apk --release \
+            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+            --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
+          cp build/app/outputs/flutter-apk/app-release.apk build/ScienceWorld_A1_preview_debug_signed.apk
+
+      - name: Package source ZIP
+        script: |
+          set -euo pipefail
+          mkdir -p build/distribution
+          zip -qr build/distribution/ScienceWorld_A1_Source.zip . \
+            -x '.git/*' '.dart_tool/*' 'build/*' 'android/.gradle/*' \
+               'android/local.properties' 'android/key.properties' \
+               'android/app/upload-keystore.jks' '.env' '.env.*'
+          cp build/ScienceWorld_A1_preview_debug_signed.apk build/distribution/
+
+    artifacts:
+      - build/distribution/ScienceWorld_A1_preview_debug_signed.apk
+      - build/distribution/ScienceWorld_A1_Source.zip
+      - build/**/outputs/**/*.log

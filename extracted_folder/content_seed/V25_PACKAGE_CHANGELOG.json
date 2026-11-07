@@ -1,0 +1,47 @@
+{
+  "source_archive": "Science_World_A1_Full_Source.zip",
+  "original_entry_count": 416,
+  "original_entries_preserved": true,
+  "updated_existing_files": [
+    "A1_MASTER_SCOPE_AR.md",
+    "QUESTION_ENGINE_SPEC_AR.md",
+    "README.md",
+    "assets/data/curriculum_catalog_2027.json",
+    "assets/data/question_bank_ar.json",
+    "assets/data/question_bank_policy.json",
+    "docs/QUALITY_FIRST_QUESTION_POLICY_AR.md",
+    "lib/features/subscription/data/plan_catalog.dart",
+    "pubspec.yaml",
+    "scripts/validate_project.py",
+    "test/question_entitlement_policy_test.dart"
+  ],
+  "added_files": [
+    "supabase/migrations/20261107_v25_question_quota_40_silver15.sql",
+    "content_seed/question_banks/arabic_unit1_lesson1_40_draft.json",
+    "content_seed/source_books/manifest.json",
+    "content_seed/BOOK_CROSSCHECK_AND_QUESTION_STATUS_AR.md",
+    "content_seed/question_banks/lesson_bank_progress_ar.json",
+    "content_seed/question_banks/lesson_bank_progress_ar.csv"
+  ],
+  "question_policy": {
+    "target": 40,
+    "free": 6,
+    "silver_total": 15,
+    "silver_paid": 9,
+    "gold": "all approved/published"
+  },
+  "approved_questions_in_student_asset_bank": 0,
+  "lesson_draft_pack": {
+    "subject": "اللغة العربية وآدابها",
+    "lesson": "أدب القضايا الوطنية والقومية",
+    "count": 40,
+    "review_status": "draft_needs_teacher_review"
+  },
+  "progress": {
+    "catalog_lessons": 237,
+    "target_questions": 9480,
+    "draft_questions_created": 40,
+    "approved_questions": 0,
+    "not_yet_drafted": 9440
+  }
+}

@@ -1,0 +1,3 @@
+-- DEPRECATED: Do not run this legacy script.
+-- Profiles and student-number triggers are included in supabase/schema.sql.
+-- Run supabase/schema.sql once from Supabase SQL Editor.

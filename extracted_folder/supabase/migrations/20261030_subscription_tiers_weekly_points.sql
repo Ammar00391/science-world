@@ -1,0 +1,4 @@
+-- LEGACY MIGRATION RETIRED.
+-- Weekly challenges/leaderboards were explicitly excluded from the product scope.
+-- Subscription tier fields are included in supabase/schema.sql.
+-- Do not run this historical migration on the new Science World project.

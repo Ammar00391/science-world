@@ -1,0 +1,3 @@
+-- DEPRECATED: Do not run this legacy script.
+-- The ordered, idempotent schema and subscription tables now live in supabase/schema.sql.
+-- Run supabase/schema.sql once from Supabase SQL Editor.

@@ -1,0 +1,2 @@
+-- DEPRECATED: SQL RPC is created by supabase/schema.sql.
+-- Do not deploy this file as an Edge Function and do not run it separately.

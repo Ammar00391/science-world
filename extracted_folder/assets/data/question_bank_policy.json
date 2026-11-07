@@ -1,0 +1,59 @@
+{
+  "title": "سياسة بنك الأسئلة – عالم العلوم",
+  "school_year": "2026-2027",
+  "default_target_per_lesson": 40,
+  "free_per_lesson": 6,
+  "premium_per_lesson": 34,
+  "minimum_quality": "لا ينشر أي سؤال قبل التحقق من المصدر وصحة الإجابة والحل.",
+  "adaptive_count": {
+    "allow_more_for": "الرياضيات والفيزياء والكيمياء والدروس التي تتطلب مهارات متنوعة أو تدريبًا حسابيًا متدرجًا",
+    "rule": "يمكن الزيادة عند الحاجة الفعلية فقط، ولا يُحشى البنك بأسئلة مكررة أو ضعيفة."
+  },
+  "publication_gates": [
+    "وجود مادة ووحدة ودرس محدد",
+    "رابط أو مرجع كتاب موثوق مع الطبعة والصفحة",
+    "إجابة نموذجية واضحة",
+    "حل أو تفسير مناسب لنوع السؤال",
+    "مراجعة علمية ولغوية مستقلة",
+    "حالة approved أو published قبل ظهور السؤال للطالب"
+  ],
+  "security": {
+    "admin_question_seeds_must_not_be_flutter_assets": true,
+    "remote_answers_must_be_checked_by_rpc": true,
+    "offline_answer_keys_can_be_extracted_from_an_apk": "known_limitation"
+  },
+  "silver_paid_per_lesson": 9,
+  "tier_access": {
+    "free": {
+      "free_per_lesson": 6,
+      "paid_per_lesson": 0,
+      "total_per_lesson": 6
+    },
+    "silver": {
+      "free_per_lesson": 6,
+      "paid_per_lesson": 9,
+      "total_per_lesson": 15
+    },
+    "gold": {
+      "free_per_lesson": "all_published",
+      "paid_per_lesson": "all_published",
+      "total_per_lesson": "all_published"
+    }
+  },
+  "server_enforcement": {
+    "rpc_migration": "20261107_v25_question_quota_40_silver15.sql",
+    "apply_to_retrieval_by_id_and_answer_check": true,
+    "active_subscription_requires_start_and_expiry_window": true,
+    "rank_quota_across_all_question_types": true,
+    "base_rpc_migration": "20261107_v24_a1_question_entitlements.sql",
+    "quota_override_migration": "20261107_v25_question_quota_40_silver15.sql",
+    "required_order": [
+      "20261107_v23_vip_plan_durations.sql",
+      "20261107_v24_a1_question_entitlements.sql",
+      "20261107_v25_question_quota_40_silver15.sql"
+    ]
+  },
+  "version": "25",
+  "silver_total_per_lesson": 15,
+  "note": "مقصود المستخدم: الفضي يفتح 15 سؤالًا إجمالًا في الدرس، لا 15 سؤالًا مدفوعًا إضافيًا."
+}

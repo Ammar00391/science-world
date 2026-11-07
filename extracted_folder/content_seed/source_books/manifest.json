@@ -1,0 +1,111 @@
+{
+  "title": "قائمة الكتب المصدرية المرفوعة لحزمة عالم العلوم",
+  "grade": "الصف الثالث الثانوي العلمي",
+  "cover_school_year": "2025-2026",
+  "pdf_count": 10,
+  "books": [
+    {
+      "subject_or_book": "اللغة العربية",
+      "file": "الصف_الثالث_الثانوي_العلمي_اللغة_العربية (1).pdf",
+      "page_count": 110,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 3655342,
+      "sha256": "23127c864576cf915c504a763760223c7083a4b99e21b43a7012162eecf15927"
+    },
+    {
+      "subject_or_book": "اللغة الإنجليزية – كتاب الطالب",
+      "file": "الصف_الثالث_الثانوي_العلمي_اللغة_الانكليزية_كتاب_الطالب.pdf",
+      "page_count": 128,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 16786550,
+      "sha256": "626eb9f130d25d54c5fd6d1e35d783055619e15b5e16ac0cb13b54d62fb34981"
+    },
+    {
+      "subject_or_book": "اللغة الإنجليزية – كتاب الأنشطة",
+      "file": "الصف_الثالث_الثانوي_العلمي_اللغة_الانكليزية_كتاب_الأنشطة.pdf",
+      "page_count": 112,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 28601220,
+      "sha256": "b0f60c7358431d5ba88d4296e12af5efff50686ed6fd82d0422466cad179223e"
+    },
+    {
+      "subject_or_book": "الكيمياء",
+      "file": "الصف_الثالث_الثانوي_العلمي_الكيمياء.pdf",
+      "page_count": 184,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 39599744,
+      "sha256": "c46feb7d2d0a2ceb91399c6f01e7385852f5124c1fe86e63f762e69b072bd036"
+    },
+    {
+      "subject_or_book": "الرياضيات – الفصل الأول",
+      "file": "الصف_الثالث_الثانوي_العلمي_الرياضيات_الفصل_الأول.pdf",
+      "page_count": 232,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 78793722,
+      "sha256": "1642bc5c507ea38230938e9bfce22227b38ebcee3927b0be3893d186e1d0dd7a"
+    },
+    {
+      "subject_or_book": "الرياضيات – الفصل الثاني",
+      "file": "الصف_الثالث_الثانوي_العلمي_الرياضيات_الفصل_الثاني.pdf",
+      "page_count": 196,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 22662321,
+      "sha256": "20493df92124f2f4f4aba99bc6166e0f331f1ba7b38fa10449b0d3d544d8d5ea"
+    },
+    {
+      "subject_or_book": "الفيزياء",
+      "file": "الصف_الثالث_الثانوي_العلمي_الفيزياء.pdf",
+      "page_count": 268,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 68638209,
+      "sha256": "a0c95e15c8a1d215d2d28dcf4acd1561e2590188c561cc0bfda2ec0796c51510"
+    },
+    {
+      "subject_or_book": "التربية الإسلامية",
+      "file": "الصف_الثالث_الثانوي_العلمي_التربية_الدينية_الاسلامية.pdf",
+      "page_count": 164,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 54212056,
+      "sha256": "810440aaac04a844160f4c1c9777070ac9948f89378acdcb9420adceaf8c08b4"
+    },
+    {
+      "subject_or_book": "اللغة الفرنسية",
+      "file": "الصف_الثالث_الثانوي_العلمي_اللغة_الفرنسية_كتاب_الطالب.pdf",
+      "page_count": 120,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 48399381,
+      "sha256": "bb116a8db8760978edf16bd8c37ef5a7160de5bee1841f105c6ee24b089afcb8"
+    },
+    {
+      "subject_or_book": "علم الأحياء",
+      "file": "الصف_الثالث_الثانوي_العلمي_علم_الأحياء.pdf",
+      "page_count": 287,
+      "cover_school_year": "2025-2026",
+      "bundled_for": "content authoring and page verification only",
+      "flutter_asset": false,
+      "size_bytes": 28537844,
+      "sha256": "0282f29e87a232869b922a7a7ef9b32345bf90c08ee44f6ed1dc6955cfdaac84"
+    }
+  ],
+  "note": "هذه النسخ محفوظة للمراجعة وإثبات المصدر داخل ZIP فقط. توجد خارج مجلد assets ولا تُضمّن في APK تلقائيًا. كتب الرياضيات والفيزياء والكيمياء والتربية الإسلامية ذات صفحات ممسوحة ضوئيًا في معظمها؛ يجب الرجوع إلى صفحات PDF المصورة عند تأليف الأسئلة.",
+  "total_source_bytes": 389886389,
+  "integrity_note": "أضيف الحجم وبصمة SHA-256 لكل PDF للتحقق من سلامة النسخ المضمّنة."
+}

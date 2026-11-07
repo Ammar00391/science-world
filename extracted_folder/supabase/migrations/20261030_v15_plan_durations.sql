@@ -1,0 +1,3 @@
+-- LEGACY MIGRATION RETIRED.
+-- tier and duration_days are created by the current supabase/schema.sql bootstrap.
+-- Do not run this historical migration on the new Science World project.

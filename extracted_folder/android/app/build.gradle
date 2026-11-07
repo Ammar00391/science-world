@@ -1,0 +1,95 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader -> localProperties.load(reader) }
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '23'
+def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '2.2.1'
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader -> keystoreProperties.load(reader) }
+}
+
+def hasKeystore = keystorePropertiesFile.exists() &&
+    keystoreProperties.getProperty('storeFile') &&
+    keystoreProperties.getProperty('storePassword') &&
+    keystoreProperties.getProperty('keyAlias') &&
+    keystoreProperties.getProperty('keyPassword')
+def allowDebugSignedRelease = System.getenv('ALLOW_DEBUG_SIGNED_RELEASE') == 'true'
+
+android {
+    namespace "com.scienceworld.science_world"
+    compileSdk 36
+    ndkVersion "28.2.13676358"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    defaultConfig {
+        applicationId "com.scienceworld.science_world"
+        minSdk 21
+        targetSdk 36
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    signingConfigs {
+        release {
+            if (hasKeystore) {
+                keyAlias keystoreProperties.getProperty('keyAlias')
+                keyPassword keystoreProperties.getProperty('keyPassword')
+                storeFile rootProject.file(keystoreProperties.getProperty('storeFile'))
+                storePassword keystoreProperties.getProperty('storePassword')
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            if (hasKeystore) {
+                signingConfig signingConfigs.release
+            } else if (System.getenv('ALLOW_DEBUG_SIGNED_RELEASE') == 'true') {
+                signingConfig signingConfigs.debug
+            } else if (allowDebugSignedRelease) {
+                signingConfig signingConfigs.debug
+            }
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+}
+
+// Fail only when a Release variant is actually built; Debug builds remain usable.
+def verifyReleaseSigning = tasks.register('verifyReleaseSigning') {
+    doLast {
+        if (!hasKeystore && !allowDebugSignedRelease) {
+            throw new GradleException('Release signing is not configured. Supply the owner-controlled upload keystore. Debug signing is permitted only for preview builds.')
+        }
+    }
+}
+tasks.matching { it.name == 'preReleaseBuild' }.configureEach {
+    dependsOn(verifyReleaseSigning)
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {}
