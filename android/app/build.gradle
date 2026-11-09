@@ -10,21 +10,28 @@ if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader -> localProperties.load(reader) }
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '23'
-def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '2.2.1'
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '25'
+def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '2.2.3'
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystorePropertiesFile.withReader('UTF-8') { reader -> keystoreProperties.load(reader) }
+def releaseSigning = [
+    CM_KEYSTORE_PATH: System.getenv('CM_KEYSTORE_PATH')?.trim(),
+    CM_KEYSTORE_PASSWORD: System.getenv('CM_KEYSTORE_PASSWORD')?.trim(),
+    CM_KEY_ALIAS: System.getenv('CM_KEY_ALIAS')?.trim(),
+    CM_KEY_PASSWORD: System.getenv('CM_KEY_PASSWORD')?.trim()
+]
+def missingReleaseSigningValues = releaseSigning
+    .findAll { name, value -> !value }
+    .keySet()
+    .toList()
+def releaseKeystoreFile = releaseSigning.CM_KEYSTORE_PATH
+    ? file(releaseSigning.CM_KEYSTORE_PATH)
+    : null
+if (releaseKeystoreFile == null || !releaseKeystoreFile.isFile() || !releaseKeystoreFile.canRead()) {
+    if (!missingReleaseSigningValues.contains('CM_KEYSTORE_PATH')) {
+        missingReleaseSigningValues.add('CM_KEYSTORE_PATH (readable keystore file required)')
+    }
 }
-
-def hasKeystore = keystorePropertiesFile.exists() &&
-    keystoreProperties.getProperty('storeFile') &&
-    keystoreProperties.getProperty('storePassword') &&
-    keystoreProperties.getProperty('keyAlias') &&
-    keystoreProperties.getProperty('keyPassword')
-def allowDebugSignedRelease = System.getenv('ALLOW_DEBUG_SIGNED_RELEASE') == 'true'
+def releaseSigningConfigured = missingReleaseSigningValues.isEmpty()
 
 android {
     namespace "com.scienceworld.science_world"
@@ -41,7 +48,7 @@ android {
 
     defaultConfig {
         applicationId "com.scienceworld.science_world"
-        minSdk 21
+        minSdkVersion flutter.minSdkVersion
         targetSdk 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -49,11 +56,11 @@ android {
 
     signingConfigs {
         release {
-            if (hasKeystore) {
-                keyAlias keystoreProperties.getProperty('keyAlias')
-                keyPassword keystoreProperties.getProperty('keyPassword')
-                storeFile rootProject.file(keystoreProperties.getProperty('storeFile'))
-                storePassword keystoreProperties.getProperty('storePassword')
+            if (releaseSigningConfigured) {
+                keyAlias releaseSigning.CM_KEY_ALIAS
+                keyPassword releaseSigning.CM_KEY_PASSWORD
+                storeFile releaseKeystoreFile
+                storePassword releaseSigning.CM_KEYSTORE_PASSWORD
             }
         }
     }
@@ -63,12 +70,8 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            if (hasKeystore) {
+            if (releaseSigningConfigured) {
                 signingConfig signingConfigs.release
-            } else if (System.getenv('ALLOW_DEBUG_SIGNED_RELEASE') == 'true') {
-                signingConfig signingConfigs.debug
-            } else if (allowDebugSignedRelease) {
-                signingConfig signingConfigs.debug
             }
             minifyEnabled false
             shrinkResources false
@@ -79,8 +82,11 @@ android {
 // Fail only when a Release variant is actually built; Debug builds remain usable.
 def verifyReleaseSigning = tasks.register('verifyReleaseSigning') {
     doLast {
-        if (!hasKeystore && !allowDebugSignedRelease) {
-            throw new GradleException('Release signing is not configured. Supply the owner-controlled upload keystore. Debug signing is permitted only for preview builds.')
+        if (!releaseSigningConfigured) {
+            throw new GradleException(
+                "Release signing is not configured. Provide the Codemagic Android signing identity. " +
+                "Missing or invalid: ${missingReleaseSigningValues.join(', ')}. Debug signing is never used for Release."
+            )
         }
     }
 }

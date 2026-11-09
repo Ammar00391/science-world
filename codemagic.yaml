@@ -7,14 +7,14 @@ workflows:
     environment:
       flutter: 3.47.9
       java: 17
+      android_signing:
+        - science_world_upload_keystore
       vars:
         SUPABASE_URL: "https://faiituujosrsthdrsefw.supabase.co"
         SUPABASE_PUBLISHABLE_KEY: "sb_publishable_oxs3N5EAiq7zfMH7_gPbgg_F3i6oerr"
-        # Preview only until a persistent owner-controlled upload key is configured.
-        ALLOW_DEBUG_SIGNED_RELEASE: "true"
 
     scripts:
-      - name: Restore the missing Android Gradle wrapper
+      - name: Verify Android build tooling
         script: |
           set -euo pipefail
           bash scripts/prepare_android_wrapper.sh
@@ -23,7 +23,7 @@ workflows:
           FLUTTER_ROOT="$(cd "$(dirname "$FLUTTER_BIN")/.." && pwd)"
           printf 'flutter.sdk=%s\n' "$FLUTTER_ROOT" > android/local.properties
 
-      - name: Validate source and data
+      - name: Validate source, bundled data, and build configuration
         script: |
           set -euo pipefail
           python3 scripts/validate_project.py
@@ -32,36 +32,31 @@ workflows:
       - name: Install dependencies and analyze
         script: |
           set -euo pipefail
-          flutter --version
           flutter clean
           flutter pub get
-          flutter analyze
+          flutter analyze --no-fatal-infos
           flutter test --reporter expanded
 
-      - name: Prepare APK signing
+      - name: Verify Release signing identity
         script: |
           set -euo pipefail
-          bash scripts/prepare_release_signing.sh
+          bash scripts/verify_android_signing.sh
 
-      - name: Build preview APK
+      - name: Build signed Release APK and App Bundle
         script: |
           set -euo pipefail
           flutter build apk --release \
             --dart-define=SUPABASE_URL="$SUPABASE_URL" \
             --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
-          cp build/app/outputs/flutter-apk/app-release.apk build/ScienceWorld_A1_preview_debug_signed.apk
+          flutter build appbundle --release \
+            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+            --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
 
-      - name: Package source ZIP
+      - name: Verify Release APK and App Bundle signatures
         script: |
           set -euo pipefail
-          mkdir -p build/distribution
-          zip -qr build/distribution/ScienceWorld_A1_Source.zip . \
-            -x '.git/*' '.dart_tool/*' 'build/*' 'android/.gradle/*' \
-               'android/local.properties' 'android/key.properties' \
-               'android/app/upload-keystore.jks' '.env' '.env.*'
-          cp build/ScienceWorld_A1_preview_debug_signed.apk build/distribution/
+          bash scripts/verify_release_artifacts.sh
 
     artifacts:
-      - build/distribution/ScienceWorld_A1_preview_debug_signed.apk
-      - build/distribution/ScienceWorld_A1_Source.zip
-      - build/**/outputs/**/*.log
+      - build/app/outputs/flutter-apk/app-release.apk
+      - build/app/outputs/bundle/release/app-release.aab
