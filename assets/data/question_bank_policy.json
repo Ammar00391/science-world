@@ -2,8 +2,8 @@
   "title": "سياسة بنك الأسئلة – عالم العلوم",
   "school_year": "2026-2027",
   "default_target_per_lesson": 40,
-  "free_per_lesson": 6,
-  "premium_per_lesson": 34,
+  "free_per_lesson": 3,
+  "premium_per_lesson": 37,
   "minimum_quality": "لا ينشر أي سؤال قبل التحقق من المصدر وصحة الإجابة والحل.",
   "adaptive_count": {
     "allow_more_for": "الرياضيات والفيزياء والكيمياء والدروس التي تتطلب مهارات متنوعة أو تدريبًا حسابيًا متدرجًا",
@@ -22,38 +22,39 @@
     "remote_answers_must_be_checked_by_rpc": true,
     "offline_answer_keys_can_be_extracted_from_an_apk": "known_limitation"
   },
-  "silver_paid_per_lesson": 9,
+  "silver_paid_per_lesson": 3,
   "tier_access": {
     "free": {
-      "free_per_lesson": 6,
+      "free_per_lesson": 3,
       "paid_per_lesson": 0,
-      "total_per_lesson": 6
+      "total_per_lesson": 3
     },
     "silver": {
-      "free_per_lesson": 6,
-      "paid_per_lesson": 9,
-      "total_per_lesson": 15
+      "free_per_lesson": 3,
+      "paid_per_lesson": 3,
+      "total_per_lesson": 6
     },
     "gold": {
-      "free_per_lesson": "all_published",
-      "paid_per_lesson": "all_published",
-      "total_per_lesson": "all_published"
+      "free_per_lesson": 40,
+      "paid_per_lesson": 40,
+      "total_per_lesson": 40
     }
   },
   "server_enforcement": {
-    "rpc_migration": "20261107_v25_question_quota_40_silver15.sql",
+    "rpc_migration": "20261113_v26_question_quotas_and_attempts.sql",
     "apply_to_retrieval_by_id_and_answer_check": true,
     "active_subscription_requires_start_and_expiry_window": true,
     "rank_quota_across_all_question_types": true,
     "base_rpc_migration": "20261107_v24_a1_question_entitlements.sql",
-    "quota_override_migration": "20261107_v25_question_quota_40_silver15.sql",
+    "quota_override_migration": "20261113_v26_question_quotas_and_attempts.sql",
     "required_order": [
       "20261107_v23_vip_plan_durations.sql",
       "20261107_v24_a1_question_entitlements.sql",
-      "20261107_v25_question_quota_40_silver15.sql"
+      "20261107_v25_question_quota_40_silver15.sql",
+      "20261113_v26_question_quotas_and_attempts.sql"
     ]
   },
-  "version": "25",
-  "silver_total_per_lesson": 15,
-  "note": "مقصود المستخدم: الفضي يفتح 15 سؤالًا إجمالًا في الدرس، لا 15 سؤالًا مدفوعًا إضافيًا."
+  "version": "26",
+  "silver_total_per_lesson": 6,
+  "note": "المجاني يفتح 3 أسئلة، والفضي يفتح 6 إجمالًا (3 مجانية + 3 إضافية)، والذهبي حتى 40 سؤالًا منشورًا ومعتمدًا."
 }

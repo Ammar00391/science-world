@@ -10,7 +10,17 @@ class QuestionAnswerResult {
   final bool isCorrect;
   final String? solution;
 
-  const QuestionAnswerResult({required this.isCorrect, this.solution});
+  const QuestionAnswerResult({
+    required this.isCorrect,
+    this.solution,
+  });
+}
+
+class QuestionAnswerReveal {
+  final String? answer;
+  final String? solution;
+
+  const QuestionAnswerReveal({this.answer, this.solution});
 }
 
 class QuestionRepository {
@@ -283,6 +293,55 @@ class QuestionRepository {
     }
 
     throw const FormatException('تعذر قراءة نتيجة التحقق من الإجابة.');
+  }
+
+  /// Reveals an answer only when the server confirms the user's active tier.
+  Future<QuestionAnswerReveal?> revealAnswer({
+    required QuestionModel question,
+  }) async {
+    final client = _client;
+    if (client == null) {
+      throw StateError('Supabase غير مهيأ؛ لا يمكن التحقق من صلاحية إظهار الإجابة.');
+    }
+    if (question.id.startsWith('local-')) return null;
+
+    final response = await client.rpc(
+      'reveal_question_answer',
+      params: {'p_question_id': question.id},
+    );
+    if (response is! List) {
+      throw const FormatException('استجابة إظهار الإجابة غير صالحة.');
+    }
+    if (response.isEmpty) return null;
+
+    final row = Map<String, dynamic>.from(response.first as Map);
+    return QuestionAnswerReveal(
+      answer: row['correct_answer']?.toString(),
+      solution: row['solution']?.toString(),
+    );
+  }
+
+  Future<void> recordSkippedAttempt({
+    required QuestionModel question,
+  }) async {
+    if (question.id.startsWith('local-')) return;
+
+    final client = _client;
+    if (client == null) {
+      throw StateError('Supabase غير مهيأ؛ لا يمكن حفظ السؤال المتروك.');
+    }
+
+    final response = await client.rpc(
+      'record_question_attempt',
+      params: {
+        'p_question_id': question.id,
+        'p_selected_answer': null,
+        'p_is_skipped': true,
+      },
+    );
+    if (response is! List || response.isEmpty) {
+      throw const FormatException('تعذر تأكيد حفظ السؤال المتروك.');
+    }
   }
 
   /// Intended for trusted administration workflows only. Regular student

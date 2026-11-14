@@ -2,23 +2,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:science_world/features/subscription/data/plan_catalog.dart';
 
 void main() {
-  test('standard lesson bank target is 40 = 6 free + 34 paid', () {
+  test('standard lesson bank target is 40 questions per lesson', () {
     expect(QuestionQuotaPolicy.targetQuestionsPerLesson, 40);
-    expect(QuestionQuotaPolicy.freeQuestionsPerLesson, 6);
-    expect(QuestionQuotaPolicy.paidQuestionsPerLesson, 34);
-    expect(
-      QuestionQuotaPolicy.freeQuestionsPerLesson +
-          QuestionQuotaPolicy.paidQuestionsPerLesson,
-      QuestionQuotaPolicy.targetQuestionsPerLesson,
-    );
+    expect(QuestionQuotaPolicy.freeQuestionsPerLesson, 3);
+    expect(QuestionQuotaPolicy.silverQuestionsPerLesson, 6);
   });
 
-  test('free students can access only the first six free questions', () {
+  test('free students can access only the first three free questions', () {
     expect(
       QuestionQuotaPolicy.canAccessQuestion(
         tier: SubscriptionTier.free,
         isPaid: false,
-        positionWithinLesson: 6,
+        positionWithinLesson: 3,
       ),
       isTrue,
     );
@@ -26,7 +21,7 @@ void main() {
       QuestionQuotaPolicy.canAccessQuestion(
         tier: SubscriptionTier.free,
         isPaid: false,
-        positionWithinLesson: 7,
+        positionWithinLesson: 4,
       ),
       isFalse,
     );
@@ -40,13 +35,13 @@ void main() {
     );
   });
 
-  test('Silver unlocks 15 questions total: 6 free + 9 paid per lesson', () {
-    expect(QuestionQuotaPolicy.paidQuestionLimit(SubscriptionTier.silver), 9);
+  test('Silver unlocks three free and three additional paid questions', () {
+    expect(QuestionQuotaPolicy.questionLimit(SubscriptionTier.silver), 6);
     expect(
       QuestionQuotaPolicy.canAccessQuestion(
         tier: SubscriptionTier.silver,
         isPaid: true,
-        positionWithinLesson: 1,
+        positionWithinLesson: 3,
       ),
       isTrue,
     );
@@ -54,15 +49,7 @@ void main() {
       QuestionQuotaPolicy.canAccessQuestion(
         tier: SubscriptionTier.silver,
         isPaid: true,
-        positionWithinLesson: 9,
-      ),
-      isTrue,
-    );
-    expect(
-      QuestionQuotaPolicy.canAccessQuestion(
-        tier: SubscriptionTier.silver,
-        isPaid: true,
-        positionWithinLesson: 10,
+        positionWithinLesson: 4,
       ),
       isFalse,
     );
@@ -70,21 +57,37 @@ void main() {
       QuestionQuotaPolicy.canAccessQuestion(
         tier: SubscriptionTier.silver,
         isPaid: false,
-        positionWithinLesson: 6,
+        positionWithinLesson: 3,
       ),
+      isTrue,
+    );
+    expect(
+      PremiumFeatureAccess.allows(SubscriptionTier.silver, 'answer_reveal'),
+      isTrue,
+    );
+    expect(
+      PremiumFeatureAccess.allows(SubscriptionTier.silver, 'favorites'),
       isTrue,
     );
   });
 
-  test('Gold unlocks every approved question, not admin permissions', () {
-    expect(QuestionQuotaPolicy.paidQuestionLimit(SubscriptionTier.gold), 34);
+  test('Gold unlocks at most forty questions, not admin permissions', () {
+    expect(QuestionQuotaPolicy.questionLimit(SubscriptionTier.gold), 40);
     expect(
       QuestionQuotaPolicy.canAccessQuestion(
         tier: SubscriptionTier.gold,
         isPaid: true,
-        positionWithinLesson: 999,
+        positionWithinLesson: 40,
       ),
       isTrue,
+    );
+    expect(
+      QuestionQuotaPolicy.canAccessQuestion(
+        tier: SubscriptionTier.gold,
+        isPaid: false,
+        positionWithinLesson: 41,
+      ),
+      isFalse,
     );
     expect(
       PremiumFeatureAccess.allows(SubscriptionTier.gold, 'admin_dashboard'),

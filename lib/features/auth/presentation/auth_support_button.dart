@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/constants/support_contacts.dart';
+
 class AuthSupportButton extends StatelessWidget {
   const AuthSupportButton({super.key});
 
@@ -30,23 +32,22 @@ class AuthSupportButton extends StatelessWidget {
               ListTile(
                 leading: const CircleAvatar(child: Icon(Icons.email_outlined)),
                 title: const Text('الدعم عبر البريد'),
-                subtitle: const Text('sscienceworld2027@gmail.com'),
+                subtitle: const Text(SupportContacts.email),
                 onTap: () {
                   Navigator.pop(sheetContext);
-                  _open(context, Uri(
-                    scheme: 'mailto',
-                    path: 'sscienceworld2027@gmail.com',
-                    queryParameters: {'subject': 'دعم تطبيق عالم العلوم'},
-                  ));
+                  _open(
+                    context,
+                    SupportContacts.emailUri(subject: 'دعم تطبيق عالم العلوم'),
+                  );
                 },
               ),
               ListTile(
                 leading: const CircleAvatar(child: Icon(Icons.chat_bubble_outline)),
                 title: const Text('الدعم عبر WhatsApp'),
-                subtitle: const Text('+90 5389857265'),
+                subtitle: const Text(SupportContacts.whatsappPhone),
                 onTap: () {
                   Navigator.pop(sheetContext);
-                  _open(context, Uri.parse('https://wa.me/905389857265'));
+                  _open(context, Uri.parse(SupportContacts.whatsappUrl));
                 },
               ),
             ]),
