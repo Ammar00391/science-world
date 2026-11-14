@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/config/supabase_config.dart';
+import '../../../core/constants/support_contacts.dart';
 import '../../auth/data/auth_service.dart';
 import '../../subscription/data/subscription_model.dart';
 import '../../subscription/data/subscription_service.dart';
@@ -74,10 +75,22 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _support() async {
-    const phone = '905389567265';
-    final uri = Uri.parse('https://wa.me/$phone?text=${Uri.encodeComponent('مرحبًا، أحتاج مساعدة في تطبيق عالم العلوم.')}');
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication) && mounted) {
-      setState(() => _message = 'تعذر فتح واتساب.');
+    final message = Uri.encodeComponent('مرحبًا، أحتاج مساعدة في تطبيق عالم العلوم.');
+    await _launchExternal(Uri.parse('${SupportContacts.whatsappUrl}?text=$message'));
+  }
+
+  Future<void> _emailSupport(String subject, {String body = ''}) {
+    return _launchExternal(
+      SupportContacts.emailUri(subject: subject, body: body),
+    );
+  }
+
+  Future<void> _launchExternal(Uri uri) async {
+    try {
+      final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!opened && mounted) setState(() => _message = 'تعذر فتح وسيلة التواصل.');
+    } on PlatformException {
+      if (mounted) setState(() => _message = 'تعذر فتح وسيلة التواصل.');
     }
   }
 
@@ -150,13 +163,58 @@ class _ProfilePageState extends State<ProfilePage> {
           const Divider(height: 1),
           _action(Icons.bookmark_outline, 'المفضلة', 'المحتوى الذي حفظته', () => context.push('/favorites')),
         ])),
-        const SizedBox(height: 18), _sectionTitle('الأمان والدعم'),
+        const SizedBox(height: 18), _sectionTitle('التواصل والدعم الفني'),
         _card(Column(children: [
+          _action(Icons.camera_alt_outlined, 'Instagram', 'تابع حساب Science World', () => _launchExternal(Uri.parse(SupportContacts.instagramUrl))),
+          const Divider(height: 1),
+          _action(Icons.chat_outlined, 'WhatsApp', SupportContacts.whatsappPhone, _support),
+          const Divider(height: 1),
+          _action(Icons.email_outlined, 'Gmail', SupportContacts.email, () => _emailSupport('دعم تطبيق عالم العلوم')),
+          const Divider(height: 1),
+          _action(Icons.support_agent, 'مراسلة الدعم الفني', 'أرسل استفسارك عبر البريد الإلكتروني', () => _emailSupport('دعم تطبيق عالم العلوم')),
+          const Divider(height: 1),
+          _action(Icons.report_problem_outlined, 'الإبلاغ عن مشكلة', 'أرسل وصف المشكلة دون بيانات حساسة', () => _emailSupport('الإبلاغ عن مشكلة في تطبيق عالم العلوم')),
+          const Divider(height: 1),
+          _action(Icons.quiz_outlined, 'الإبلاغ عن سؤال خاطئ', 'أرفق معرف السؤال والصف والمادة والدرس', () => _emailSupport('الإبلاغ عن سؤال خاطئ', body: 'معرف السؤال:\nالصف:\nالمادة:\nالدرس:\nوصف المشكلة:')),
+          const Divider(height: 1),
+          _action(Icons.workspace_premium_outlined, 'مشكلة في الاشتراك', 'أرسل تفاصيل المشكلة دون بيانات الدفع الحساسة', () => _emailSupport('مشكلة في اشتراك Science World')),
+          const Divider(height: 1),
+          _action(Icons.lightbulb_outline, 'اقتراح ميزة جديدة', 'شاركنا اقتراحك', () => _emailSupport('اقتراح ميزة جديدة')),
+          const Divider(height: 1),
+          _action(Icons.copy_outlined, 'نسخ رقم الدعم', SupportContacts.whatsappPhone, () async {
+            await Clipboard.setData(const ClipboardData(text: SupportContacts.whatsappPhone));
+            if (mounted) setState(() => _message = 'تم نسخ رقم الدعم.');
+          }),
+          const Divider(height: 1),
           _action(Icons.lock_outline, 'تغيير كلمة المرور', 'استخدم خيار استعادة كلمة المرور', () => context.push('/reset')),
-          const Divider(height: 1),
-          _action(Icons.support_agent, 'التواصل مع الدعم', 'مساعدة تطبيق عالم العلوم', _support),
-          const Divider(height: 1),
-          _action(Icons.copy_outlined, 'نسخ رقم الدعم', '+90 538 956 7265', () async { await Clipboard.setData(const ClipboardData(text: '+90 538 956 7265')); if (mounted) setState(() => _message = 'تم نسخ رقم الدعم.'); }),
+        ])),
+        const SizedBox(height: 18),
+        _sectionTitle('الأسئلة الشائعة'),
+        _card(Column(children: const [
+          ExpansionTile(
+            leading: Icon(Icons.menu_book_outlined),
+            title: Text('متى تظهر أسئلة الدرس؟'),
+            children: [ListTile(title: Text('تظهر الأسئلة بعد مراجعتها واعتمادها؛ لا تظهر المسودات للطلاب.'))],
+          ),
+          ExpansionTile(
+            leading: Icon(Icons.workspace_premium_outlined),
+            title: Text('كيف أتأكد من تفعيل اشتراكي؟'),
+            children: [ListTile(title: Text('تحقق من حالة الاشتراك وتاريخه في قسم «اشتراكي» داخل الملف الشخصي.'))],
+          ),
+          ExpansionTile(
+            leading: Icon(Icons.support_agent_outlined),
+            title: Text('كيف أبلغ عن سؤال غير صحيح؟'),
+            children: [ListTile(title: Text('افتح السؤال واختر الإبلاغ عنه لإرفاق معرفه والصف والمادة والدرس.'))],
+          ),
+        ])),
+        const SizedBox(height: 18),
+        _sectionTitle('معلومات التطبيق'),
+        _card(const Column(children: [
+          ListTile(
+            leading: Icon(Icons.info_outline),
+            title: Text('Science World • عالم العلوم'),
+            subtitle: Text('الإصدار 2.2.3+25'),
+          ),
         ])),
         if (_message != null) Padding(padding: const EdgeInsets.only(top: 12), child: Text(_message!, textAlign: TextAlign.center, style: TextStyle(color: theme.colorScheme.primary))),
         const SizedBox(height: 16),

@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../core/constants/support_contacts.dart';
 
 class PaymentHelpPage extends StatelessWidget {
   final String tier;
   const PaymentHelpPage({super.key, this.tier = 'silver'});
 
-  static const supportPhone = '+90 538 956 7265';
-  static const whatsappUrl = 'https://wa.me/905389567265';
+  static const supportPhone = SupportContacts.whatsappPhone;
+  static const whatsappUrl = SupportContacts.whatsappUrl;
 
-  Future<void> _openWhatsApp() async {
+  Future<void> _openWhatsApp(BuildContext context) async {
     final uri = Uri.parse(whatsappUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    try {
+      final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!opened && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تعذر فتح واتساب.')),
+        );
+      }
+    } on PlatformException {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تعذر فتح واتساب.')),
+        );
+      }
     }
   }
 
@@ -43,10 +57,13 @@ class PaymentHelpPage extends StatelessWidget {
             style: TextStyle(height: 1.6),
           ),
           const SizedBox(height: 16),
-          const Text('رقم الدعم: +90 538 956 7265', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            'رقم الدعم: $supportPhone',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 10),
           FilledButton.icon(
-            onPressed: _openWhatsApp,
+            onPressed: () => _openWhatsApp(context),
             icon: const Icon(Icons.chat),
             label: const Text('التواصل عبر واتساب'),
           ),

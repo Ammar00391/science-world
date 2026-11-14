@@ -6,6 +6,7 @@ import 'package:vibration/vibration.dart';
 class SoundService {
   static const String _soundKey = 'sound_enabled';
   static const String _volumeKey = 'sound_volume';
+  static const String _vibrationKey = 'vibration_enabled';
   AudioPlayer? _player;
   AudioPlayer get _audioPlayer => _player ??= AudioPlayer();
 
@@ -17,6 +18,14 @@ class SoundService {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_soundKey) ?? true;
   }
+  Future<void> setVibrationEnabled(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_vibrationKey, enabled);
+  }
+  Future<bool> isVibrationEnabled() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_vibrationKey) ?? true;
+  }
   Future<double> getVolume() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getDouble(_volumeKey) ?? 0.75;
@@ -27,13 +36,19 @@ class SoundService {
     await _audioPlayer.setVolume(value.clamp(0.0, 1.0).toDouble());
   }
   Future<void> _play(String asset, {int vibrationMs = 45}) async {
-    if (!await isEnabled()) return;
-    try {
-      await _audioPlayer.stop();
-      await _audioPlayer.setVolume(await getVolume());
-      await _audioPlayer.play(AssetSource(asset));
-    } catch (_) {
-      try { if (await Vibration.hasVibrator() ?? false) await Vibration.vibrate(duration: vibrationMs); } catch (_) {}
+    if (await isEnabled()) {
+      try {
+        await _audioPlayer.stop();
+        await _audioPlayer.setVolume(await getVolume());
+        await _audioPlayer.play(AssetSource(asset));
+      } catch (_) {}
+    }
+    if (await isVibrationEnabled()) {
+      try {
+        if (await Vibration.hasVibrator() ?? false) {
+          await Vibration.vibrate(duration: vibrationMs);
+        }
+      } catch (_) {}
     }
   }
   Future<void> playCorrect() => _play('audio/correct.wav', vibrationMs: 55);

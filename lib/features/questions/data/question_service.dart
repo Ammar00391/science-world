@@ -57,6 +57,12 @@ class QuestionService {
     );
   }
 
+  Future<QuestionAnswerReveal?> revealAnswer({
+    required QuestionModel question,
+  }) {
+    return _repo.revealAnswer(question: question);
+  }
+
   Future<void> upsert(QuestionModel question) async {
     await _repo.upsert(question);
   }
