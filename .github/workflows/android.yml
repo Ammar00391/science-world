@@ -1,1 +1,48 @@
-name: Android Build Placeholder
+name: Android CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Flutter and Android sources
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.47.9"
+          channel: stable
+          cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate bundled data and build configuration
+        run: |
+          python3 scripts/validate_project.py
+          node --check supabase/functions/ai-chat/index.js
+
+      - name: Install dependencies, analyze, and test
+        run: |
+          flutter pub get
+          flutter analyze --no-fatal-infos
+          flutter test --reporter expanded

@@ -2,37 +2,40 @@
 /// Server-side authorization remains authoritative for protected data/actions.
 enum SubscriptionTier { free, silver, gold }
 
-/// Client-side quota reference for display and tests. The Supabase RPC migration
-/// is authoritative and enforces the same rule before returning question data.
+/// Client-side quota reference for display and tests. Supabase remains
+/// authoritative and enforces the same rule before returning question data.
 class QuestionQuotaPolicy {
   static const int targetQuestionsPerLesson = 40;
-  static const int freeQuestionsPerLesson = 6;
-  static const int paidQuestionsPerLesson = 34;
-  static const int silverPaidQuestionsPerLesson = 9;
+  static const int freeQuestionsPerLesson = 3;
+  static const int silverQuestionsPerLesson = 6;
 
-  static int paidQuestionLimit(SubscriptionTier tier) {
+  static int questionLimit(SubscriptionTier tier) {
     switch (tier) {
       case SubscriptionTier.free:
-        return 0;
+        return freeQuestionsPerLesson;
       case SubscriptionTier.silver:
-        return silverPaidQuestionsPerLesson;
+        return silverQuestionsPerLesson;
       case SubscriptionTier.gold:
-        return paidQuestionsPerLesson;
+        return targetQuestionsPerLesson;
     }
   }
 
+  /// For Free/Silver, positionWithinLesson is the rank in its free or paid
+  /// group. Silver receives the first three questions from each group.
   static bool canAccessQuestion({
     required SubscriptionTier tier,
     required bool isPaid,
     required int positionWithinLesson,
   }) {
     if (positionWithinLesson < 1) return false;
-    if (tier == SubscriptionTier.gold) return true;
-    if (isPaid) {
-      return tier == SubscriptionTier.silver &&
-          positionWithinLesson <= silverPaidQuestionsPerLesson;
+    switch (tier) {
+      case SubscriptionTier.free:
+        return !isPaid && positionWithinLesson <= freeQuestionsPerLesson;
+      case SubscriptionTier.silver:
+        return positionWithinLesson <= freeQuestionsPerLesson;
+      case SubscriptionTier.gold:
+        return positionWithinLesson <= targetQuestionsPerLesson;
     }
-    return positionWithinLesson <= freeQuestionsPerLesson;
   }
 }
 
@@ -70,7 +73,7 @@ class PlanCatalog {
     tagline: 'ابدأ رحلتك العلمية',
     features: [
       'الكتب والمحتوى المنشور مجانًا',
-      'الأسئلة المجانية عند اعتماد ونشر محتوى المادة',
+      '3 أسئلة من كل درس عند اعتماد ونشر محتوى المادة',
       'مؤقت الدراسة الهادئ',
       'النقاط والإنجازات الأساسية',
     ],
@@ -85,7 +88,7 @@ class PlanCatalog {
     tagline: 'مزايا إضافية للمراجعة اليومية',
     features: [
       'كل مزايا المجاني',
-      'فتح 15 سؤالًا إجمالًا في كل درس (6 مجانية + 9 مدفوعة)',
+      'فتح 6 أسئلة من كل درس (3 مجانية + 3 إضافية)',
       'ملخصات الدروس والأمثلة المحلولة المنشورة',
       'تنزيل المواد المشمولة بالباقة للعمل دون إنترنت',
       'حفظ تقدم الدراسة واستكمال الاختبارات',
@@ -94,6 +97,9 @@ class PlanCatalog {
       'خطة مراجعة أساسية وبطاقات ذاكرة',
       'دفتر القوانين والتعريفات',
       'البحث داخل ملفات PDF المحمّلة',
+      'إظهار الإجابة والشرح والتلميحات',
+      'حفظ الأسئلة المفضلة وسجل المحاولات',
+      'إعادة حل الأسئلة الخاطئة وأدوات مساعدة أثناء الاختبار',
       'شارة فضية مميزة',
     ],
   );
@@ -106,7 +112,7 @@ class PlanCatalog {
     durationLabel: '75 يومًا',
     tagline: 'كل المحتوى وأقوى أدوات التفوق',
     features: [
-      'جميع مزايا الفضي، مع فتح جميع الأسئلة والاختبارات والتدريبات دون حدود',
+      'جميع مزايا الفضي، وفتح حتى 40 سؤالًا من كل درس',
       'جميع ملخصات الدروس والأمثلة المحلولة والمواد التسع المنشورة',
       'تنزيل كامل المواد المتاحة للعمل دون إنترنت',
       'مدرس ذكاء اصطناعي خاص لكل مادة',
@@ -139,6 +145,13 @@ class PlanCatalog {
 class PremiumFeatureAccess {
   static const silverFeatures = <String>{
     'silver_extra_questions',
+    'answer_reveal',
+    'detailed_question_explanations',
+    'question_hints',
+    'attempt_history',
+    'performance_statistics',
+    'retry_wrong_answers',
+    'exam_assistance',
     'lesson_summaries',
     'worked_examples',
     'limited_offline_downloads',
@@ -179,7 +192,6 @@ class PremiumFeatureAccess {
     'theme_customization',
     'subject_notes',
     'advanced_formula_notebook',
-    'favorites',
     'personal_folders',
     'advanced_search',
     'smart_review_notifications',
@@ -190,6 +202,7 @@ class PremiumFeatureAccess {
     'achievement_certificates',
     'study_time_statistics',
     'daily_monthly_goals',
+    'favorites',
     // Earlier planned gold capabilities retained for compatibility.
     'written_step_checker',
     'lesson_audio',

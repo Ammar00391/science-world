@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
               children: [
                 _FeatureTile(icon: Icons.menu_book_rounded, title: 'المكتبة', subtitle: 'الكتب والمراجع', color: const Color(0xFF2877E8), onTap: () => context.push('/library')),
                 _FeatureTile(icon: Icons.play_lesson_rounded, title: 'الدروس', subtitle: 'شرح ومتابعة', color: const Color(0xFF159D86), onTap: () => context.push('/subjects')),
-                _FeatureTile(icon: Icons.quiz_rounded, title: 'بنك الأسئلة', subtitle: 'تدرّب واختبر نفسك', color: const Color(0xFF8B5CE6), onTap: () => context.push('/quiz-bank')),
+                _FeatureTile(icon: Icons.quiz_rounded, title: 'بنك الأسئلة', subtitle: 'الأسئلة تظهر بعد اعتمادها', color: const Color(0xFF8B5CE6), onTap: () => context.push('/quiz-bank')),
                 _FeatureTile(icon: Icons.smart_toy_rounded, title: 'المساعد الذكي', subtitle: 'اسأل وتعلّم خطوة بخطوة', color: const Color(0xFFDA8A28), onTap: () => context.push('/assistant')),
                 _FeatureTile(icon: Icons.event_available_rounded, title: 'الاختبارات', subtitle: 'اختبر مستواك', color: const Color(0xFFDA5D78), onTap: () => context.push('/test')),
                 _FeatureTile(icon: Icons.emoji_events_rounded, title: 'الإنجازات', subtitle: 'تابع تحدياتك', color: const Color(0xFF1A9AB4), onTap: () => context.push('/gamification')),

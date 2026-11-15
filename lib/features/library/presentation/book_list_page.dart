@@ -10,7 +10,6 @@ class BookListPage extends StatefulWidget {
 }
 
 class _BookListPageState extends State<BookListPage> {
-  final BookRepository _repo = BookRepository();
   List<BookModel> _books = [];
   bool _loading = true;
 

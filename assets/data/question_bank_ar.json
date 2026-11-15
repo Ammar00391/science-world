@@ -10,11 +10,11 @@
   "questions": [],
   "policy": {
     "target_per_lesson": 40,
-    "free_per_lesson": 6,
-    "paid_per_lesson": 34,
-    "silver_total_per_lesson": 15,
-    "silver_paid_per_lesson": 9,
-    "gold_access": "all_approved_published",
+    "free_per_lesson": 3,
+    "paid_per_lesson": 37,
+    "silver_total_per_lesson": 6,
+    "silver_paid_per_lesson": 3,
+    "gold_access": "up_to_40_approved_published",
     "do_not_pad_or_repeat": true,
     "drafts_not_student_visible": true
   }

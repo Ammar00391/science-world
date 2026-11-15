@@ -174,10 +174,27 @@ class _TestPageState extends State<TestPage> {
     if (_index >= _questions.length) _finish();
   }
 
-  void _skip() {
+  Future<void> _skip() async {
     final question = _current;
-    if (question == null) return;
-    setState(() => _skipped.add(question.id));
+    if (question == null || _checking || _finished) return;
+    setState(() => _checking = true);
+    try {
+      await _repository.recordSkippedAttempt(question: question);
+      if (!mounted) return;
+      setState(() {
+        _checking = false;
+        _skipped.add(question.id);
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _checking = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تعذر حفظ تخطي السؤال. لم يتم الانتقال؛ حاول مجددًا.'),
+        ),
+      );
+      return;
+    }
     _next();
   }
 
@@ -394,7 +411,7 @@ class _TestPageState extends State<TestPage> {
                       children: [
                         Expanded(child: OutlinedButton(onPressed: _retryCurrent, child: const Text('حاول مجددًا'))),
                         const SizedBox(width: 8),
-                        Expanded(child: TextButton(onPressed: _skip, child: const Text('تخطي السؤال'))),
+                        Expanded(child: TextButton(onPressed: _checking ? null : _skip, child: const Text('تخطي السؤال'))),
                       ],
                     ),
                 ] else ...[
@@ -404,7 +421,7 @@ class _TestPageState extends State<TestPage> {
                     icon: const Icon(Icons.check_rounded),
                     label: const Text('تحقق من الإجابة'),
                   ),
-                  TextButton(onPressed: _skip, child: const Text('تخطي هذا السؤال')),
+                  TextButton(onPressed: _checking ? null : _skip, child: const Text('تخطي هذا السؤال')),
                 ],
               ],
             ),

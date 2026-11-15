@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class PdfReaderPage extends StatelessWidget {
   const PdfReaderPage({super.key});

@@ -16,15 +16,17 @@ class _SplashPageState extends State<SplashPage>
   static const _navy = Color(0xFF04142D);
   static const _blue = Color(0xFF1677FF);
   static const _cyan = Color(0xFF43D7FF);
+  static const _introDuration = Duration(milliseconds: 2400);
+  static const _splashDuration = Duration(milliseconds: 3000);
 
   late final AnimationController _intro = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 4200),
-  )..forward();
+    duration: _introDuration,
+  );
   late final AnimationController _orbit = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 8),
-  )..repeat();
+  );
   late final Animation<double> _logoScale = CurvedAnimation(
     parent: _intro,
     curve: const Interval(0.08, 0.52, curve: Curves.elasticOut),
@@ -38,15 +40,40 @@ class _SplashPageState extends State<SplashPage>
     curve: const Interval(0.56, 0.78, curve: Curves.easeOut),
   );
   Timer? _routeTimer;
+  bool? _motionReduced;
 
   @override
   void initState() {
     super.initState();
-    _routeTimer = Timer(const Duration(milliseconds: 4700), () {
-      if (mounted) context.go('/intro');
+    _routeTimer = Timer(_splashDuration, () {
+      if (mounted) _goToIntro();
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    if (_motionReduced == reduceMotion) return;
+    _motionReduced = reduceMotion;
+
+    if (reduceMotion) {
+      _intro
+        ..stop()
+        ..value = 1;
+      _orbit
+        ..stop()
+        ..value = 0;
+    } else {
+      _intro.forward();
+      _orbit.repeat();
+    }
+  }
+
+  void _goToIntro() {
+    _routeTimer?.cancel();
+    context.go('/intro');
+  }
 
   @override
   void dispose() {
@@ -82,6 +109,18 @@ class _SplashPageState extends State<SplashPage>
                 ),
               ),
               CustomPaint(painter: _StarPainter(_orbit.value)),
+              SafeArea(
+                child: Align(
+                  alignment: AlignmentDirectional.topStart,
+                  child: TextButton(
+                    onPressed: _goToIntro,
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white.withOpacity(.82),
+                    ),
+                    child: const Text('تخطي'),
+                  ),
+                ),
+              ),
               SafeArea(
                 child: Center(
                   child: Padding(
@@ -201,7 +240,7 @@ class _SplashPageState extends State<SplashPage>
                         Opacity(
                           opacity: _taglineFade.value,
                           child: const Text(
-                            'مستقبلك يبدأ بالمعرفة',
+                            'اكتشف، تعلّم، تطوّر',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: 'NotoSansArabic',
@@ -216,7 +255,7 @@ class _SplashPageState extends State<SplashPage>
                         Opacity(
                           opacity: _taglineFade.value,
                           child: const Text(
-                            'LEARN  •  DISCOVER  •  ACHIEVE',
+                            'DISCOVER  •  LEARN  •  EVOLVE',
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 9,

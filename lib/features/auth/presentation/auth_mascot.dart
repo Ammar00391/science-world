@@ -131,7 +131,6 @@ class _AuthMascotPainter extends CustomPainter {
   final double phase;
 
   static const _navy = Color(0xFF142B55);
-  static const _blue = Color(0xFF2878E8);
   static const _skin = Color(0xFFFFDFC9);
   static const _skinShadow = Color(0xFFE8B99F);
   static const _ink = Color(0xFF20324D);

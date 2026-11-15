@@ -259,7 +259,10 @@ def check_android_and_workflow(pubspec: str) -> None:
     require("android.permission.INTERNET" in permission_names,
             "Android manifest must retain the INTERNET permission.")
     require(
-        all(permission == "android.permission.INTERNET" for permission in permission_names),
+        all(
+            permission in {"android.permission.INTERNET", "android.permission.VIBRATE"}
+            for permission in permission_names
+        ),
         "Android manifest contains an unexpected permission; review it before release.",
     )
 
