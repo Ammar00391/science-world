@@ -67,7 +67,7 @@ void main() {
     );
     expect(
       PremiumFeatureAccess.allows(SubscriptionTier.silver, 'favorites'),
-      isTrue,
+      isFalse,
     );
   });
 
@@ -92,6 +92,10 @@ void main() {
     expect(
       PremiumFeatureAccess.allows(SubscriptionTier.gold, 'admin_dashboard'),
       isFalse,
+    );
+    expect(
+      PremiumFeatureAccess.allows(SubscriptionTier.gold, 'favorites'),
+      isTrue,
     );
     expect(
       PremiumFeatureAccess.allows(SubscriptionTier.gold, 'unlimited_questions'),

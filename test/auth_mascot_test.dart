@@ -38,7 +38,13 @@ void main() {
       ),
     ));
     await tester.pump(const Duration(milliseconds: 200));
-    expect(find.byType(CustomPaint), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AuthMascot),
+        matching: find.byType(CustomPaint),
+      ),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 }
