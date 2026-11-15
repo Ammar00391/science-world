@@ -169,6 +169,8 @@ class _ProfilePageState extends State<ProfilePage> {
           const Divider(height: 1),
           _action(Icons.chat_outlined, 'WhatsApp', SupportContacts.whatsappPhone, _support),
           const Divider(height: 1),
+          _action(Icons.send_rounded, 'Telegram', 'انضم إلى قناة دعم Science World', () => _launchExternal(Uri.parse(SupportContacts.telegramUrl))),
+          const Divider(height: 1),
           _action(Icons.email_outlined, 'Gmail', SupportContacts.email, () => _emailSupport('دعم تطبيق عالم العلوم')),
           const Divider(height: 1),
           _action(Icons.support_agent, 'مراسلة الدعم الفني', 'أرسل استفسارك عبر البريد الإلكتروني', () => _emailSupport('دعم تطبيق عالم العلوم')),

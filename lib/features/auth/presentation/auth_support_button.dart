@@ -50,6 +50,15 @@ class AuthSupportButton extends StatelessWidget {
                   _open(context, Uri.parse(SupportContacts.whatsappUrl));
                 },
               ),
+              ListTile(
+                leading: const CircleAvatar(child: Icon(Icons.send_rounded)),
+                title: const Text('الدعم عبر Telegram'),
+                subtitle: const Text('انضم إلى قناة دعم Science World'),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  _open(context, Uri.parse(SupportContacts.telegramUrl));
+                },
+              ),
             ]),
           ),
         ),
