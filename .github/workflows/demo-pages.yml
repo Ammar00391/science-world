@@ -1,0 +1,84 @@
+name: Publish interactive web demo
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "demo/**"
+      - ".github/workflows/demo-pages.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "demo/**"
+      - ".github/workflows/demo-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out demo
+        uses: actions/checkout@v4
+
+      - name: Validate demo markup and script
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class DemoParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.has_title = False
+                  self.has_main = False
+                  self.has_demo_notice = False
+
+              def handle_starttag(self, tag, attrs):
+                  self.has_title |= tag == "title"
+                  self.has_main |= tag == "main"
+
+              def handle_data(self, data):
+                  self.has_demo_notice |= "معاينة واجهات تجريبية" in data
+
+          html = Path("demo/index.html").read_text(encoding="utf-8")
+          parser = DemoParser()
+          parser.feed(html)
+          parser.close()
+          if not (parser.has_title and parser.has_main and parser.has_demo_notice):
+              raise SystemExit("Demo is missing required page structure or its prototype notice.")
+          PY
+          node -e 'const fs = require("node:fs"); const html = fs.readFileSync("demo/index.html", "utf8"); const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)]; if (!scripts.length) throw new Error("No demo script found"); for (const script of scripts) new Function(script[1]);'
+
+  deploy:
+    needs: validate
+    if: github.event_name != 'pull_request'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out demo
+        uses: actions/checkout@v4
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload demo site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: demo
+
+      - name: Deploy demo site
+        id: deployment
+        uses: actions/deploy-pages@v4
