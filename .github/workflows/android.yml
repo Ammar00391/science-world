@@ -38,6 +38,7 @@ jobs:
 
       - name: Validate bundled data and build configuration
         run: |
+          bash scripts/test_ensure_android_sdk.sh
           python3 scripts/validate_project.py
           node --check supabase/functions/ai-chat/index.js
 
