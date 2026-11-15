@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../data/book_repository.dart';
 import '../data/book_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,7 +9,6 @@ class BookListPage extends StatefulWidget {
 }
 
 class _BookListPageState extends State<BookListPage> {
-  final BookRepository _repo = BookRepository();
   List<BookModel> _books = [];
   bool _loading = true;
 

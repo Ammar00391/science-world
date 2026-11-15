@@ -119,7 +119,7 @@ class _WorldHubPageState extends State<WorldHubPage> {
       FilledButton(onPressed:()async{Navigator.pop(c);setState(()=>_puzzlesSolved++);await _save('world_puzzles',_puzzlesSolved);await _reward(8,'إجابة صحيحة: الدائرة مفتوحة');},child:const Text('انفتح مسار الدائرة'))
     ]));
   }
-  void _startFocus(){_timer?.cancel();setState(()=>{_running=true,_secondsLeft=_focusMinutes*60});_timer=Timer.periodic(const Duration(seconds:1),(t){if(!mounted)return;if(_secondsLeft<=1){t.cancel();setState(()=>{_secondsLeft=0,_running=false});_reward(15,'انتهت جلسة التركيز');}else{setState(()=>_secondsLeft--);}});}
-  void _stopFocus(){_timer?.cancel();setState(()=>{_running=false,_secondsLeft=0});}
+  void _startFocus(){_timer?.cancel();setState((){_running=true;_secondsLeft=_focusMinutes*60;});_timer=Timer.periodic(const Duration(seconds:1),(t){if(!mounted)return;if(_secondsLeft<=1){t.cancel();setState((){_secondsLeft=0;_running=false;});_reward(15,'انتهت جلسة التركيز');}else{setState(()=>_secondsLeft--);}});}
+  void _stopFocus(){_timer?.cancel();setState((){_running=false;_secondsLeft=0;});}
   String _exploreText(String place)=>switch(place){'الفضاء'=>'المسافة بين الأرض والشمس نحو 150 مليون كيلومتر في المتوسط. السنة الضوئية وحدة مسافة لا وحدة زمن.','المحيطات'=>'تغطي المحيطات معظم سطح الأرض، وتؤثر في المناخ عبر تخزين الحرارة ونقلها.','جسم الإنسان'=>'القلب يضخ الدم، والرئتان تبادلان الأكسجين وثاني أكسيد الكربون مع الهواء.','الغابات'=>'تدعم الغابات التنوع الحيوي وتخزن الكربون وتساعد على حماية التربة ودورة الماء.',_=>'اختر مجالًا لاكتشاف معلومة علمية.'};
 }

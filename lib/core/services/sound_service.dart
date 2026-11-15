@@ -45,7 +45,7 @@ class SoundService {
     }
     if (await isVibrationEnabled()) {
       try {
-        if (await Vibration.hasVibrator() ?? false) {
+        if (await Vibration.hasVibrator()) {
           await Vibration.vibrate(duration: vibrationMs);
         }
       } catch (_) {}
