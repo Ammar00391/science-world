@@ -35,7 +35,12 @@ done
 
 if ((${#missing[@]})); then
   echo "Installing required Android SDK packages."
-  yes | "$sdkmanager" --licenses >/dev/null
+  # sdkmanager can exit after the final prompt, so yes receives SIGPIPE.
+  # Ignore the producer's status while preserving sdkmanager's exit status.
+  if ! (set +o pipefail; yes 2>/dev/null | "$sdkmanager" --licenses >/dev/null); then
+    echo "Failed to accept Android SDK licenses." >&2
+    exit 1
+  fi
   "$sdkmanager" "${missing[@]}"
 fi
 
