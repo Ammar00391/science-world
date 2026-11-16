@@ -215,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ListTile(
             leading: Icon(Icons.info_outline),
             title: Text('Science World • عالم العلوم'),
-            subtitle: Text('الإصدار 2.2.3+25'),
+            subtitle: Text('الإصدار 2.2.4+26'),
           ),
         ])),
         if (_message != null) Padding(padding: const EdgeInsets.only(top: 12), child: Text(_message!, textAlign: TextAlign.center, style: TextStyle(color: theme.colorScheme.primary))),

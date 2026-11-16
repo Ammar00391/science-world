@@ -176,7 +176,7 @@ class _SettingsPageState extends State<SettingsPage> {
               const ListTile(
                 leading: Icon(Icons.info_outline),
                 title: Text('حول التطبيق'),
-                subtitle: Text('عالم العلوم • الإصدار 2.2.3+25'),
+                subtitle: Text('عالم العلوم • الإصدار 2.2.4+26'),
               ),
               if (_message != null)
                 Padding(

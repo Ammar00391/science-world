@@ -10,8 +10,8 @@ if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader -> localProperties.load(reader) }
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '25'
-def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '2.2.3'
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '26'
+def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '2.2.4'
 
 def releaseSigning = [
     CM_KEYSTORE_PATH: System.getenv('CM_KEYSTORE_PATH')?.trim(),
